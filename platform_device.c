@@ -60,7 +60,7 @@ static void plat_dummy_work(struct work_struct *work)
 		pr_err("%s: size = %d\n", __func__, size);
 		if (size > MEM_SIZE)
 			size = MEM_SIZE;
-			for(i = 0; i < size; i++) {
+			for (i = 0; i < size; i++) {
 				data = plat_dummy_mem_read8(my_device, i);
 				pr_err("%s: mem[%d] = 0x%x ('%c')\n", __func__,
 					i, data, data);
@@ -92,14 +92,14 @@ static int plat_dummy_probe(struct platform_device *pdev)
 
 	my_device->mem = devm_ioremap_resource(&pdev->dev, res);
 	if (IS_ERR(my_device->mem))
-			return PTR_ERR(my_device->mem);
+		return PTR_ERR(my_device->mem);
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
 	pr_err("res 1 = %zx..%zx\n", res->start, res->end);
 
 	my_device->regs = devm_ioremap_resource(&pdev->dev, res);
 	if (IS_ERR(my_device->regs))
-			return PTR_ERR(my_device->regs);
+		return PTR_ERR(my_device->regs);
 
 	platform_set_drvdata(pdev, my_device);
 
@@ -112,7 +112,7 @@ static int plat_dummy_probe(struct platform_device *pdev)
 						  MAX_DUMMY_PLAT_THREADS);
 
 	if (!my_device->data_read_wq)
-			return -ENOMEM;
+		return -ENOMEM;
 
 	INIT_DELAYED_WORK(&my_device->dwork, plat_dummy_work);
 	my_device->js_pool_time = msecs_to_jiffies(DEVICE_POOLING_TIME_MS);
@@ -140,18 +140,22 @@ static int __init plat_dummy_device_add(void)
 {
 	int err;
 
-	struct resource res[2] = {{
+	struct resource res[2] = {
+		{
 		.start	= mem_base,
-		.end	= mem_base + MEM_SIZE -1,
+		.end	= mem_base + MEM_SIZE - 1,
 		.name	= "dummy_mem",
 		.flags	= IORESOURCE_MEM,
-	},
-	 {
+		},
+
+		{
 		.start	= reg_base,
-		.end	= reg_base + REG_SIZE -1,
+		.end	= reg_base + REG_SIZE - 1,
 		.name	= "dummy_regs",
 		.flags	= IORESOURCE_MEM,
-	}};
+		}
+
+	};
 
 	pr_err("++%s\n", __func__);
 
@@ -224,11 +228,10 @@ int __init plat_dummy_init_module(void)
 	return plat_dummy_driver_register();
 }
 
-void __exit plat_dummy_cleanup_module( void )
+void __exit plat_dummy_cleanup_module(voidi)
 {
 	pr_err("Platform dummy test module exit\n");
 	plat_dummy_unregister();
-	return;
 }
 
 MODULE_AUTHOR("Vitaliy Vasylskyy <vitaliy.vasylskyy@globallogic.com>");
